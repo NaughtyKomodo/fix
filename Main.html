@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debt Relief Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background-color: #e0f7fa; /* Light Blue */
+      }
+
+      h1 {
+        color: #0277bd; /* Dark Blue */
+        margin-bottom: 2%;
+      }
+
+      .container {
+        background-color: #ffffff; /* White */
+        padding: 10%;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2%;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .input-group {
+        margin-bottom: 2%;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.8%;
+        font-weight: bold;
+        color: #0277bd; /* Dark Blue */
+      }
+
+      input,
+      select,
+      button {
+        width: 95%;
+        padding: 3%;
+        margin-bottom: 4%;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #0277bd; /* Dark Blue */
+        outline: none;
+      }
+
+      button {
+        background-color: #ffeb3b; /* Yellow */
+        color: #0277bd; /* Dark Blue */
+        cursor: pointer;
+        border: none;
+      }
+
+      button:hover {
+        background-color: #ffd600; /* Darker Yellow */
+      }
+
+      .result {
+        background-color: #ffffff; /* White */
+        padding: 14%;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 300px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Debt Relief Calculator</h1>
+    <div class="container">
+      <div class="input-group">
+        <label for="debtPrincipal">Sisa Utang Pokok (Rp):</label>
+        <input
+          type="number"
+          id="debtPrincipal"
+          placeholder="Enter principal debt amount"
+        />
+      </div>
+      <div class="input-group">
+        <label for="debtOther"
+          >Sisa Utang Bunga, Denda, Ongkos/Biaya Lainnya (Rp):</label
+        >
+        <input
+          type="number"
+          id="debtOther"
+          placeholder="Enter other debt amount"
+        />
+      </div>
+      <div class="input-group">
+        <label for="reliefOption">Select Payment Period:</label>
+        <select id="reliefOption">
+          <option value="june">Until June 2024</option>
+          <option value="sept">July - September 2024</option>
+          <option value="dec">October - December 2024</option>
+        </select>
+      </div>
+      <button onclick="calculateRelief()">Calculate</button>
+      <div class="result" id="result"></div>
+    </div>
+
+    <script>
+      function calculateRelief() {
+        const debtPrincipal = parseFloat(
+          document.getElementById("debtPrincipal").value
+        );
+        const debtOther = parseFloat(
+          document.getElementById("debtOther").value
+        );
+        const totalDebt = debtPrincipal + debtOther;
+
+        const reliefPrincipal = debtPrincipal * 0.6;
+        const reliefOther = debtOther;
+        const totalRelief = reliefPrincipal + reliefOther;
+        const totalAmountToBePaid = totalDebt - totalRelief;
+
+        const reliefOption = document.getElementById("reliefOption").value;
+        let additionalRelief = 0;
+        let additionalReliefPercentage = 0;
+        if (reliefOption === "june") {
+          additionalRelief = totalAmountToBePaid - 1000000;
+          additionalReliefPercentage = 40;
+        } else if (reliefOption === "sept") {
+          additionalRelief = totalAmountToBePaid - 750000;
+          additionalReliefPercentage = 30;
+        } else if (reliefOption === "dec") {
+          additionalRelief = totalAmountToBePaid - 500000;
+          additionalReliefPercentage = 20;
+        }
+        const adminFee = additionalRelief * 0.01;
+        const finalAmountToBePaid = additionalRelief + adminFee;
+
+        document.getElementById("result").innerHTML = `
+    <h2>Calculation Result</h2>
+    <p style="text-align: left;"><strong>Total Sisa Utang:</strong> <br> Rp ${totalDebt.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Keringanan Pokok (60% x Rp ${debtPrincipal.toLocaleString()}):</strong> <br> Rp ${reliefPrincipal.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Keringanan BDO/Biaya Lainnya (100% x Rp ${debtOther.toLocaleString()}):</strong> <br> Rp ${reliefOther.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Total Keringanan:</strong> <br> Rp ${totalRelief.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Total Harus Dibayar Sebelum Tambahan Keringanan:</strong> <br> Rp ${totalAmountToBePaid.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Additional Relief (${additionalReliefPercentage}%):</strong> <br> Rp ${additionalRelief.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Admin Fee (1% PNBP):</strong> <br> Rp ${adminFee.toLocaleString()}</p>
+    <p style="text-align: left;"><strong>Final Amount to be Paid:</strong> <br> Rp ${finalAmountToBePaid.toLocaleString()}</p>
+`;
+      }
+    </script>
+  </body>
+</html>
